@@ -2,12 +2,12 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<h1 xmlns="http://www.w3.org/1999/html">{% block title %}New Booking{% endblock %}</h1>
+<h1 xmlns="http://www.w3.org/1999/html">{% block title %}New Booking for {{ room.name }}{% endblock %}</h1>
 {% endblock %}
 
 
 {% block content %}
-    <form method="POST" action="/bookings/create">
+    <form method="POST" action="{{ url_for('bookings.create', room_id=room['id']) }}">
         {{ form.csrf_token }}
         {{ render_field(form.title) }}
 
@@ -19,7 +19,7 @@
         {{ render_field(form.summary) }}
         {{ render_field(form.attendees) }}
 
-        {{ render_field(form.room) }}
+        {{ render_field(form.resources) }}
         {{ form.submit(style="margin-top: 10px;") }}
     </form>
 {% endblock %}

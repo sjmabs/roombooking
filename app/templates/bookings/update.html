@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Edit {{ form.title.data }}{% endblock %}</h1>
+  <h1>{% block title %}Edit {{ form.title.data }} in {{ booking.room.name }} {% endblock %}</h1>
 {% endblock %}
 
 {% block content %}

@@ -44,12 +44,16 @@ def index():
     return render_template('bookings/index.html', bookings=bookings)
 
 
-@bp.route('/create', methods=['GET', 'POST'])
+@bp.route('/create/<int:room_id>', methods=['GET', 'POST'])
 @login_required
-def create():
+def create(room_id):
 
     form = RoomBookingForm()
-    form.room.choices = ["", ] + [room.name for room in Room.query.all()]
+    room = Room.query.filter_by(id=room_id).first()
+
+    room_resources = [r for r in room.room_resources]
+    room_resources = [resource.resource.name for resource in room_resources]
+    form.resources.choices = room_resources
 
     if form.validate_on_submit():
         title = form.title.data
@@ -60,9 +64,6 @@ def create():
         time_start = datetime.strptime(str(form.time_start.data), '%H:%M:%S')
         time_end = datetime.strptime(str(form.time_end.data), '%H:%M:%S')
         attendees = form.attendees.data
-
-        room = form.room.data
-        room = Room.query.filter_by(name=form.room.data).first()
 
         error = None
 
@@ -80,27 +81,39 @@ def create():
             error = 'End Time is required.'
         if not attendees:
             error = 'Please enter number of people expected to be attending.'
-        if room == "":
-            error = 'Please select a room.'
 
         if error is not None:
             flash(error)
-            return redirect(url_for('bookings.create'))
+            return redirect(url_for('bookings.create', room_id=room.id))
 
         # if no errors add the booking to the booking table
         else:
-            room = Room.query.filter_by(name=form.room.data).first()
             new_room_booking = RoomBooking(creator_id=g.user.id, title=title, summary=summary, event_start=event_start,
                                            time_start=time_start, time_end=time_end, room_id=room.id,
                                            attendees=attendees)
-
             db.session.add(new_room_booking)
 
+            booking = RoomBooking.query.filter_by(title=title, creator_id=g.user.id).first()
+
+            if form.resources.data:
+                # add new resources
+                for r in form.resources.data:
+                    # look for the resource
+                    resource = Resource.query.filter_by(name=r).first()
+                    # find the room_resource id
+                    room_resource = RoomResource.query.filter_by(resource_id=resource.id).first()
+                    new_booked_resource = BookedResource(room_resource_id=room_resource.id, room_booking_id=booking.id)
+                    db.session.add(new_booked_resource)
+            else:
+                # clear if no data was given this time
+                booking.booked_resources.clear()
+
             db.session.commit()
+
             flash('Booking Created Successfully!')
             return redirect(url_for('bookings.index'))
 
-    return render_template('bookings/create.html', form=form)
+    return render_template('bookings/create.html', form=form, room=room)
 
 
 def get_booking(id, check_author=True):

@@ -3,7 +3,7 @@
 {% block header %}
   <h1>{% block title %}Bookings{% endblock %}</h1>
   {% if g.user %}
-    <a class="action" href="{{ url_for('bookings.create') }}">New</a>
+    <a class="action" href="{{ url_for('rooms.index') }}">New</a>
   {% endif %}
 {% endblock %}
 
