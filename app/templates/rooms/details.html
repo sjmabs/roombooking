@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+
+{% block header %}
+  <h1>{% block title %}{{ room.name }}{% endblock %}</h1>
+    <a href="{{ url_for('rooms.update', id=room.id) }}"><h6>Edit</h6></a>
+
+{% endblock %}
+
+{% block content %}
+  <h4 class="d-flex justify-content-center">Room Description</h4>
+  <div class="d-flex justify-content-center">
+    <p style="white-space: pre-wrap;">{{ room['description'] }}</p>
+  </div>
+    <hr>
+  <div>
+    <h4 class="d-flex justify-content-center">Room Resources</h4>
+    <div class="columns2">
+
+      {% for resource in room_resources %}
+
+        <li> {{ resource.resource.name }} </li>
+
+
+      {% endfor %}
+
+    </div>
+    <hr>
+     <h4 class="d-flex justify-content-center">Room Availability (TODO)</h4>
+    <!-- The Room's day availability to show here with option to move forward and back a day -->
+  </div>
+  <hr>
+{% endblock %}

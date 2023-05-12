@@ -1,0 +1,17 @@
+{% from "_formhelpers.html" import render_field %}
+{% extends 'base.html' %}
+
+{% block header %}
+<h1 xmlns="http://www.w3.org/1999/html">{% block title %}New Room{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="POST" action="/rooms/create">
+      {{ form.csrf_token }}
+      {{ render_field(form.name) }}
+      {{ render_field(form.description) }}
+      {{ render_field(form.resources) }}
+
+      <input type="submit" value="Create">
+  </form>
+{% endblock %}

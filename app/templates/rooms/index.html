@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Rooms{% endblock %}</h1>
+  {% if g.user.role == 'admin' %}
+    <a class="action" href="{{ url_for('rooms.create') }}">New</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+  {% for room in rooms %}
+    <article class="booking">
+      <header>
+        <div>
+          <a href="{{ url_for('rooms.details', id=room['id']) }}"><h1>{{ room['name'] }}</h1></a>
+          <div class="about"> {{ room['description'] }}</div>
+        </div>
+        <div>
+          <a class="action" href="{{ url_for('rooms.details', id=room['id']) }}">Details</a>
+        </div>
+      </header>
+    </article>
+    {% if not loop.last %}
+      <hr style="margin-bottom: 0">
+    {% endif %}
+  {% endfor %}
+{% endblock %}
+

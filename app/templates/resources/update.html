@@ -1,0 +1,16 @@
+{% from "_formhelpers.html" import render_field %}
+{% extends 'base.html' %}
+
+{% block header %}
+<h1 xmlns="http://www.w3.org/1999/html">{% block title %}Update Resource{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="POST" action="{{ url_for('resources.update', id=resource['id']) }}">
+      {{ form.csrf_token }}
+      {{ render_field(form.name) }}
+      {{ render_field(form.description) }}
+
+      <input type="submit" value="Update">
+  </form>
+{% endblock %}

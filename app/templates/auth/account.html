@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Account{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="firstname">First Name</label>
+    <input name="firstname" value="{{ request.form['firstname'] or user['firstname'] }}" id="firstname">
+    <label for="lastname">Surname</label>
+    <input name="lastname" id="lastname" value="{{ request.form['lastname'] or user['lastname'] }}">
+    <label for="email">Email</label>
+    <input name="email" id="email" type="email" value="{{ request.form['email'] or user['email'] }}">
+    <div>
+      <h3>Change Password</h3>
+    </div>
+    <label for="password">Old Password</label>
+    <input type="password" name="password" id="password">
+    <label for="password1">New Password</label>
+    <input type="password" name="password1" id="password1">
+    <label for="password2">Re-enter Password</label>
+    <input type="password" name="password2" id="password2">
+    <input type="submit" value="Update Account">
+  </form>
+{% endblock %}
+

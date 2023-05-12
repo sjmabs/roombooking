@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Bookings{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('bookings.create') }}">New</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for booking in bookings %}
+    <article class="booking">
+      <header>
+        <div>
+          {% if booking.status in ['declined', 'cancelled']  %}
+            <div class="badge badge-danger">
+              {{ booking.status }}
+            </div>
+          {% elif booking.status in ['accepted', 'confirmed'] %}
+            <div class="badge badge-success">
+              {{ booking.status }}
+            </div>
+          {% elif 'pending' in booking.status %}
+            <div class="badge badge-warning">
+              {{ booking.status }}
+            </div>
+          {% endif %}
+          <a href="{{ url_for('bookings.details', id=booking['id']) }}"><h1>{{ booking['title'] }}</h1></a>
+          <a href="{{ url_for('rooms.details', id=booking.room.id) }}"><h6>{{ booking.room.name }}</h6></a>
+          <div>
+            {{ booking.event_start.strftime('%d/%m/%Y') }} {{ booking.time_start.strftime('%H:%M') }}-{{ booking.time_end.strftime('%H:%M') }}
+          </div>
+          <div class="about">by {{ booking.creator['firstname']}} {{ booking.creator['lastname'] }}</div>
+        </div>
+        <div>
+          {% if booking.status == 'pending completion' %}
+          <a class="action" href="{{ url_for('bookings.complete', id=booking['id']) }}">Complete</a>
+          <a class="action" href="{{ url_for('bookings.details', id=booking['id']) }}">Details</a>
+
+          {% else %}
+          <a class="action" href="{{ url_for('bookings.update', id=booking['id']) }}">Edit</a>
+          <a class="action" href="{{ url_for('bookings.details', id=booking['id']) }}">Details</a>
+          {% endif %}
+        </div>
+      </header>
+    </article>
+    {% if not loop.last %}
+      <hr style="margin-bottom: 0">
+    {% endif %}
+  {% endfor %}
+{% endblock %}
+

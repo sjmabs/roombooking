@@ -1,0 +1,102 @@
+{% from "_formhelpers.html" import render_field %}
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}{{ booking.title }}{% endblock %}</h1>
+    <h4>{{ booking.eventstart.strftime('%d/%m/%Y') }}</h4>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="topbar">
+    {% if booking.status in ['declined', 'cancelled'] %}
+
+    {% elif booking.status == 'accepted' %}
+      <div class="badge badge-success">
+        {{ booking.status }}
+      </div>
+    {% elif 'pending' in booking.status %}
+      <div class="badge badge-warning">
+        {{ booking.status }}
+      </div>
+    {% endif %}
+
+  <div class="time-bar">
+    <p>{{ booking.timestart.strftime('%H:%M') }} - {{ booking.timeend.strftime('%H:%M') }}</p>
+
+  </div>
+</div>
+
+
+    <h5 class="container d-flex justify-content-center">Booking Description</h5>
+    <div class="container d-flex justify-content-center">
+      <p style="white-space: pre-wrap;">{{ booking['summary'] }}</p>
+    </div>
+    <hr>
+        <h5 class="container d-flex justify-content-center">Number of people attending</h5>
+    <div class="container d-flex justify-content-center">
+      <p>{{ booking['attendees'] }}</p>
+    </div>
+    <hr>
+
+
+    <form method="POST" action="{{ url_for('bookings.complete', id=booking['id']) }}">
+        {{ form.csrf_token }}
+
+        <h5 style="text-align: center">Event Info</h5>
+
+        {{ render_field(form.eventlead) }}
+        {{ render_field(form.eventemail) }}
+        {{ render_field(form.trybooking) }}
+
+        {% if booking.catering == 'Yes' %}
+            <h5 style="text-align: center">Catering Requirements</h5>
+
+                {{ render_field(form.cateringnum) }}
+                {{ render_field(form.servingstaff) }}
+                {{ render_field(form.budget) }}
+                {{ render_field(form.cateringreq)  }}
+            <hr>
+        {% elif booking.catering == 'No' %}
+        <div style="display: none">
+                {{ render_field(form.cateringnum) }}
+                {{ render_field(form.servingstaff) }}
+                {{ render_field(form.budget) }}
+                {{ render_field(form.cateringreq)  }}
+        <hr>
+        </div>
+
+
+        {% endif %}
+
+
+        <h5 style="text-align: center">Estates Requirements</h5>
+            {{ render_field(form.cleaning) }}
+            {{ render_field(form.access) }}
+            {{ render_field(form.parking) }}
+
+        <h5 style="text-align: center">Other Requirements</h5>
+            {{ render_field(form.it) }}
+            {{ render_field(form.signage) }}
+
+        <h5 style="text-align: center">Rooms Required</h5>
+
+            {{ render_field(form.rooms) }}
+
+            {{ form.submit(style="margin-top: 10px;") }}
+
+  </form>
+  <hr>
+<script>
+    function yesnoCheck(that) {
+        if (that.value == "Yes") {
+      alert("Please fill in catering requirements");
+            document.getElementsById("ifYes").style.display = "inherit";
+        } else {
+            document.getElementById("ifYes").style.display = "none";
+        }
+    }
+</script>
+{% endblock %}
+

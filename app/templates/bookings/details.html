@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+
+{% block header %}
+  <h1>{% block title %}{{ booking.title }}{% endblock %}</h1>
+    <h4>{{ booking.event_start.strftime('%d/%m/%Y') }}</h4>
+{% endblock %}
+
+{% block content %}
+
+<div class="topbar">
+    {% if booking.status in ['declined', 'cancelled'] %}
+
+    {% elif booking.status == 'confirmed' %}
+      <div class="badge badge-success">
+        {{ booking.status }}
+      </div>
+    {% elif 'pending' in booking.status %}
+      <div class="badge badge-warning">
+        {{ booking.status }}
+      </div>
+    {% endif %}
+    <h3>{{ booking.room.name }}</h3>
+  <div class="time-bar">
+    <p>{{ booking.time_start.strftime('%H:%M') }} - {{ booking.time_end.strftime('%H:%M') }}</p>
+
+  </div>
+</div>
+
+
+<h4 class="d-flex justify-content-center">Booking Description</h4>
+<div class="container d-flex justify-content-center">
+
+  <p style="white-space: pre-wrap;">{{ booking['summary'] }}</p>
+</div>
+<hr>
+    <h4 class="d-flex justify-content-center">Booked Resources</h4>
+    <div class="columns2">
+
+      {% for resource in booking.booked_resources %}
+
+        <li> {{ resource.room_resource.resource.name }} </li>
+
+
+      {% endfor %}
+
+    </div>
+  <hr>
+
+
+
+{% if booking['status'] == 'pending approval' and g.user.role == 'admin' or g.user.role == 'admin' %}
+    <form action="{{ url_for('bookings.cancelled', id=booking['id']) }}" method="post">
+      <input class="danger" type="submit" value="Cancel" onclick="return confirm('Are you sure you want to cancel this booking?')";>
+    </form>
+  {% else %}
+  <hr>
+
+
+{% endif %}
+
+{% endblock %}

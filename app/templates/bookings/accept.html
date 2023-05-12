@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+
+{% block header %}
+  <h1>{% block title %}{{ booking.title }}{% endblock %}</h1>
+    <h4>{{ booking.event_start.strftime('%d/%m/%Y') }}</h4>
+{% endblock %}
+
+{% block content %}
+
+<div class="testing">
+  <div class="time-bar">
+    <p>{{ booking.time_start.strftime('%H:%M') }} - {{ booking.time_end.strftime('%H:%M') }}</p>
+  </div>
+
+</div>
+    {% if booking.status == 'declined' %}
+      <div class="badge badge-danger">
+        {{ booking.status }}
+      </div>
+    {% elif booking.status == 'accepted' %}
+      <div class="badge badge-success">
+        {{ booking.status }}
+      </div>
+    {% elif booking.status == 'pending approval' %}
+      <div class="badge badge-warning">
+        {{ booking.status }}
+      </div>
+    {% endif %}
+
+<h4 class="d-flex justify-content-center">Booking Description</h4>
+<div class="container d-flex justify-content-center">
+
+
+  <p style="white-space: pre-wrap;">{{ booking['summary'] }}</p>
+</div>
+
+{% if booking['status'] == 'pending approval' and g.user.role == 'admin' or g.user.role == 'admin' %}
+  {% if booking.status == 'accepted' %}
+    <form action="{{ url_for('bookings.declined', id=booking['id']) }}" method="post">
+      <input class="danger" type="submit" value="Cancel">
+    </form>
+  {% else %}
+    <div class="approve">
+      <form action="{{ url_for('bookings.accepted', id=booking['id']) }}" method="post">
+        <input class="success" type="submit" value="Accept">
+      </form>
+
+      <form action="{{ url_for('bookings.declined', id=booking['id']) }}" method="post">
+        <input class="danger" type="submit" value="Decline">
+      </form>
+    </div>
+  <hr>
+  {% endif %}
+
+{% endif %}
+
+{% endblock %}
