@@ -21,8 +21,9 @@
           {% if g.user %}
             <li class="nav-item"><a class="nav-link" href="{{ url_for('bookings.index') }}">Bookings</a>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('rooms.index') }}">Rooms</a>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.account') }}">{{ g.user.firstname }}</a>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.logout') }}">Log Out</a>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('resources.index') }}">Resources</a>
+            <li class="nav-item current-user"><a class="nav-link" href="{{ url_for('main.account') }}">{{ g.user.firstname }}</a>
+            <li class="nav-item nav-right"><a class="nav-link" href="{{ url_for('main.logout') }}">Log Out</a>
           {% else %}
             <li class="nav-item"><a class="nav-link" href="{{ url_for('main.register') }}">Register</a>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('main.login') }}">Log In</a>

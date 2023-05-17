@@ -1,10 +1,14 @@
-{% from "_formhelpers.html" import render_field %}
 {% extends 'base.html' %}
 
 
 {% block header %}
-  <h1>{% block title %}{{ resource.name }}{% endblock %}</h1>
+    <h1>{% block title %}{{ resource.name }}{% endblock %}</h1>
+{% if g.user.role == 'admin' %}
+    <a href="{{ url_for('resources.update', id=resource.id) }}"><h6>Edit</h6></a>
+{% endif %}
+
 {% endblock %}
+
 
 {% block content %}
   <h4 class="d-flex justify-content-center">Resource Description</h4>
