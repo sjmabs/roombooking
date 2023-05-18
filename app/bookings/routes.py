@@ -234,8 +234,7 @@ def update(id):
 
         if error is not None:
             flash(error)
-            return redirect(url_for('bookings.update'))
-
+            return render_template('bookings/update.html', form=form, booking=booking)
         else:
             booking.title = title
             booking.summary = summary
