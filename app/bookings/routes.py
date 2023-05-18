@@ -56,6 +56,7 @@ def create(room_id):
     form.resources.choices = room_resources
 
     if form.validate_on_submit():
+
         title = form.title.data
         summary = form.summary.data
 
@@ -73,6 +74,10 @@ def create(room_id):
             error = 'Title is too long.'
         if not event_start:
             error = 'Date is required.'
+        print(form.event_start.data)
+
+        if form.event_start.data < datetime.now().date():
+            error = 'Date cannot be in past'
         if not summary:
             error = 'Summary is required.'
         if not time_start:
@@ -84,7 +89,14 @@ def create(room_id):
 
         if error is not None:
             flash(error)
-            return redirect(url_for('bookings.create', room_id=room.id))
+            form = RoomBookingForm(date=event_start,
+                                   attendees=attendees,
+                                   time_start=time_start,
+                                   time_end=time_end,
+                                   )
+            form.resources.choices = room_resources
+
+            return render_template('bookings/create.html', form=form, room=room)
 
         # if no errors add the booking to the booking table
         else:
@@ -222,7 +234,7 @@ def update(id):
 
         if error is not None:
             flash(error)
-            return redirect(url_for('bookings.create'))
+            return redirect(url_for('bookings.update'))
 
         else:
             booking.title = title
