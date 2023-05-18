@@ -74,8 +74,6 @@ def create(room_id):
             error = 'Title is too long.'
         if not event_start:
             error = 'Date is required.'
-        print(form.event_start.data)
-
         if form.event_start.data < datetime.now().date():
             error = 'Date cannot be in past'
         if not summary:
@@ -223,6 +221,8 @@ def update(id):
             error = 'Title is required.'
         if not event_start:
             error = 'Date is required.'
+        if form.event_start.data < datetime.now().date():
+            error = 'Date cannot be in past'
         if not summary:
             error = 'Summary is required.'
         if not time_start:
