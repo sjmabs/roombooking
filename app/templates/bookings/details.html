@@ -48,11 +48,22 @@
 
 
 
-{% if booking['status'] == 'pending approval' and g.user.role == 'admin' or g.user.role == 'admin' %}
-    <form action="{{ url_for('bookings.cancelled', id=booking['id']) }}" method="post">
-      <input class="danger" type="submit" value="Cancel" onclick="return confirm('Are you sure you want to cancel this booking?')";>
-    </form>
-    <hr>
+{% if booking['status'] == 'pending approval' and g.user.role == 'admin' %}
+    <div class="approve">
+      <form action="{{ url_for('bookings.accepted', id=booking['id']) }}" method="post">
+        <input class="success" type="submit" value="Accept">
+      </form>
+      <form action="{{ url_for('bookings.declined', id=booking['id']) }}" method="post">
+        <input class="danger" type="submit" value="Decline">
+      </form>
+    </div>
+  <hr>
 {% endif %}
+{% if booking.status not in ['declined', 'cancelled'] %}
+    <form action="{{ url_for('bookings.cancelled', id=booking['id']) }}" method="post">
+      <input class="danger" type="submit" value="Cancel" onclick="return confirm('Are you sure you want to cancel this booking?')">
+    </form>
+{% endif %}
+
 
 {% endblock %}

@@ -84,3 +84,4 @@ class RoomBookingForm(FlaskForm):
 
     submit = SubmitField('Submit')
 
+

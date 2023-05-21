@@ -136,3 +136,18 @@ def update(id):
 
     return render_template('rooms/update.html', form=form, room=room)
 
+
+@bp.route('/<int:id>/delete', methods=('POST', 'GET'))
+@login_required
+def delete(id):
+    room = Room.query.filter_by(id=id).first()
+    admin = User.query.filter_by(
+        id=g.user.id).first()
+
+    if admin.role != 'admin':
+        abort(403)
+
+    db.session.delete(room)
+    db.session.commit()
+    return redirect(url_for('rooms.index'))
+

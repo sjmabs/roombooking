@@ -97,3 +97,18 @@ def details(id):
     resource = Resource.query.filter_by(id=id).first()
     return render_template('resources/details.html', resource=resource)
 
+
+@bp.route('/<int:id>/delete', methods=('POST', 'GET'))
+@login_required
+def delete(id):
+    resource = Resource.query.filter_by(id=id).first()
+    admin = User.query.filter_by(
+        id=g.user.id).first()
+
+    if admin.role != 'admin':
+        abort(403)
+
+    db.session.delete(resource)
+    db.session.commit()
+    return redirect(url_for('resources.index'))
+

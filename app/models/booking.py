@@ -14,7 +14,6 @@ now = datetime.datetime.now()
 class Booking(db.Model):
     __tablename__ = "bookings"
 
-    #  Preliminary Events Form
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     creator_id = db.Column(db.Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     creator = db.relationship('User', foreign_keys=[creator_id])
