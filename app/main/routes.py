@@ -8,6 +8,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from app.main import bp
 from app.extensions import db
 from app.models.user import User
+from app.models.auth import RegisterForm, LoginForm, AccountForm
 
 
 @bp.route('/', methods=['POST', 'GET'])
@@ -17,14 +18,14 @@ def index():
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
-
+    form = RegisterForm()
     # create a register form model
-    if request.method == 'POST':
-        password = request.form['password']
-        firstname = request.form['firstname']
-        lastname = request.form['lastname']
-        email = request.form['email']
-
+    if form.validate_on_submit():
+        password = form.password.data
+        confirm = form.confirm.data
+        firstname = form.first_name.data
+        lastname = form.surname.data
+        email = form.email.data
         error = None
 
         if not firstname:
@@ -35,6 +36,8 @@ def register():
             error = "Email is required."
         elif not password:
             error = 'Password is required.'
+        elif password != confirm:
+            error = 'Passwords do not match.'
 
         if error is None:
             user = User.query.filter_by(
@@ -57,19 +60,29 @@ def register():
                 return redirect(url_for('main.login'))
 
         flash(error)
+        return render_template('auth/register.html', form=form)
 
-    return render_template('auth/register.html')
+    return render_template('auth/register.html', form=form)
 
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
-    if session:
-        return redirect('/')
+    # if session:
+    #     return redirect(url_for('bookings.index'))
 
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        password = form.password.data
+        email = form.email.data
+
         error = None
+
+        if not email:
+            error = "Email is required."
+        elif not password:
+            error = 'Password is required.'
+
         user = User.query.filter_by(
             email=email).first()
 
@@ -79,11 +92,12 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user.id
+            load_logged_in_user()
             return redirect(url_for('bookings.index'))
 
         flash(error)
 
-    return render_template('auth/login.html')
+    return render_template('auth/login.html', form=form)
 
 
 @bp.before_app_request
@@ -120,13 +134,15 @@ def account():
     user = User.query.filter_by(
                 id=g.user.id).first()
 
-    if request.method == 'POST':
-        password = request.form['password']
-        firstname = request.form['firstname']
-        lastname = request.form['lastname']
-        email = request.form['email']
-        password1 = request.form['password1']
-        password2 = request.form['password2']
+    form = AccountForm(obj=user, first_name=user.firstname, surname=user.lastname)
+
+    if form.validate_on_submit():
+        password = form.old_password.data
+        firstname = form.first_name.data
+        lastname = form.surname.data
+        email = form.email.data
+        password1 = form.password.data
+        password2 = form.confirm.data
 
         error = None
 
@@ -173,4 +189,4 @@ def account():
 
         flash(error)
 
-    return render_template('auth/account.html', user=user)
+    return render_template('auth/account.html', form=form)

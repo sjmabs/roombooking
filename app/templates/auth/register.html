@@ -1,3 +1,4 @@
+{% from "_formhelpers.html" import render_field %}
 {% extends 'base.html' %}
 
 {% block header %}
@@ -5,15 +6,13 @@
 {% endblock %}
 
 {% block content %}
-  <form method="post">
-    <label for="firstname">First Name</label>
-    <input name="firstname" id="firstname">
-    <label for="lastname">Surname</label>
-    <input name="lastname" id="lastname">
-    <label for="email">Email</label>
-    <input name="email" id="email" type="email">
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password">
-    <input type="submit" value="Register">
+  <form method="POST" action="{{ url_for('main.register') }}">
+    {{ form.csrf_token }}
+        {{ render_field(form.first_name) }}
+        {{ render_field(form.surname) }}
+        {{ render_field(form.email) }}
+        {{ render_field(form.password) }}
+        {{ render_field(form.confirm) }}
+        {{ form.submit(style="margin-top: 10px;") }}
   </form>
 {% endblock %}
