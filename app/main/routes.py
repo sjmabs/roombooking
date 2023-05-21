@@ -5,7 +5,6 @@ from flask import (
 )
 
 from werkzeug.security import check_password_hash, generate_password_hash
-from werkzeug.exceptions import abort
 from app.main import bp
 from app.extensions import db
 from app.models.user import User
@@ -13,11 +12,7 @@ from app.models.user import User
 
 @bp.route('/', methods=['POST', 'GET'])
 def index():
-    # used for testing and adding accounts
-    # print(generate_password_hash('shaun', method='sha256'))
-    # print(datetime.date.today())
-    # print(datetime.time())
-    return render_template('index.html')
+    return redirect(url_for('bookings.index'))
 
 
 @bp.route('/register', methods=('GET', 'POST'))
