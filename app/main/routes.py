@@ -1,7 +1,7 @@
 import functools
 
 from flask import (
-    flash, g, redirect, render_template, request, session, url_for
+    flash, g, redirect, render_template, session, url_for
 )
 
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -44,9 +44,11 @@ def register():
                 email=email).first()  # if this returns a user, then the email already exists in database
             if user:
                 error = f"Email is already in use."
+                flash(error)
                 return redirect(url_for('main.register'))
             else:
-                new_user = User(email=email, firstname=firstname, lastname=lastname, password=generate_password_hash(password, method='sha256'))
+                new_user = User(email=email, firstname=firstname, lastname=lastname,
+                                password=generate_password_hash(password, method='sha256'))
 
                 # add the new user to the database
                 db.session.add(new_user)
@@ -56,6 +58,7 @@ def register():
                 user = User.query.filter_by(
                     email=email).first()
 
+                flash(error)
                 session['user_id'] = user.id
                 return redirect(url_for('main.login'))
 

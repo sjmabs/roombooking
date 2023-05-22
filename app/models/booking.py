@@ -1,13 +1,11 @@
 import datetime
 from sqlalchemy import ForeignKey
 from flask_wtf import FlaskForm
-from wtforms import widgets, StringField, DateField, TimeField, SelectMultipleField, TextAreaField, \
-    SubmitField, IntegerField, SelectField, EmailField
-from wtforms.validators import DataRequired, Length, Optional
-from wtforms_alchemy import QuerySelectMultipleField
-from app.models.room import MultiCheckboxField, Room
-
+from wtforms import StringField, DateField, TimeField, TextAreaField, \
+    SubmitField, IntegerField
+from wtforms.validators import DataRequired, Length
 from app.extensions import db
+
 now = datetime.datetime.now()
 
 
@@ -42,5 +40,3 @@ class CreateBookingForm(FlaskForm):
     event_for = StringField(u'Who is the event for? (Students, Staff, External, Parents etc)',
                             validators=[DataRequired('Please enter who the event is for.')])
     submit = SubmitField('Submit')
-
-

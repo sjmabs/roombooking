@@ -1,6 +1,4 @@
 # to create flask forms for login, register and account pages
-
-from app.extensions import db
 from flask_wtf import FlaskForm
 from wtforms import EmailField, PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired, EqualTo
@@ -27,7 +25,3 @@ class RegisterForm(FlaskForm):
 class AccountForm(RegisterForm):
     old_password = PasswordField('Old Password')
     submit = SubmitField('Update Account')
-
-
-
-

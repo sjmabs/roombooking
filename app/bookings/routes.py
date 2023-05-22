@@ -1,9 +1,8 @@
 from app.bookings import bp
 from app.extensions import db
 from app.main.routes import login_required
-from flask import (flash, g, redirect, render_template, request, session, url_for)
+from flask import (flash, g, redirect, render_template, session, url_for)
 from app.models.user import User
-from app.models.booking import Booking, CreateBookingForm
 from app.models.resource import Resource, RoomResource, BookedResource
 from app.models.room import Room, RoomBooking, RoomBookingForm
 from werkzeug.exceptions import abort
@@ -292,4 +291,3 @@ def cancelled(id):
     booking.status = 'cancelled'
     db.session.commit()
     return redirect(url_for('bookings.index'))
-

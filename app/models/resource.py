@@ -1,6 +1,6 @@
 from app.extensions import db
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, TimeField, TextAreaField, widgets, SelectMultipleField
+from wtforms import StringField
 from wtforms.validators import DataRequired
 from sqlalchemy import ForeignKey
 

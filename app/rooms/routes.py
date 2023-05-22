@@ -5,7 +5,7 @@ from app.models.user import User
 from app.models.room import Room, CreateRoom
 from app.models.resource import Resource, RoomResource
 
-from flask import (flash, g, redirect, render_template, request, session, url_for)
+from flask import flash, g, redirect, render_template, url_for
 from werkzeug.exceptions import abort
 
 
@@ -61,11 +61,6 @@ def create():
             return redirect(url_for('rooms.index'))
 
     return render_template('rooms/create.html', form=form)
-
-
-# need an update room route
-
-# need a delete room route
 
 
 @bp.route('/<int:id>/details', methods=('GET',))
@@ -150,4 +145,3 @@ def delete(id):
     db.session.delete(room)
     db.session.commit()
     return redirect(url_for('rooms.index'))
-

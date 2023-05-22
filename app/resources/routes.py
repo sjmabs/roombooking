@@ -2,9 +2,8 @@ from app.main.routes import login_required
 from app.resources import bp
 from app.extensions import db
 from app.models.user import User
-from app.models.room import Room
-from app.models.resource import Resource, RoomResource, CreateResource
-from flask import (flash, g, redirect, render_template, request, session, url_for)
+from app.models.resource import Resource, CreateResource
+from flask import flash, g, redirect, render_template, url_for
 from werkzeug.exceptions import abort
 
 
@@ -111,4 +110,3 @@ def delete(id):
     db.session.delete(resource)
     db.session.commit()
     return redirect(url_for('resources.index'))
-

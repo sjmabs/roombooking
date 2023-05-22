@@ -1,10 +1,7 @@
 from app.extensions import db
 from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, TimeField, TextAreaField, widgets, SelectMultipleField, SubmitField, \
-    IntegerField, SelectField
-
-from wtforms.widgets import CheckboxInput
-
+    IntegerField
 from wtforms_alchemy import QuerySelectMultipleField
 
 from wtforms.validators import DataRequired, Length
@@ -63,7 +60,8 @@ class RoomBooking(db.Model):
 
     attendees = db.Column(db.Integer, nullable=False)
 
-    booked_resources = db.relationship('BookedResource', back_populates="room_booking", cascade='all, delete, delete-orphan')
+    booked_resources = db.relationship('BookedResource', back_populates="room_booking",
+                                       cascade='all, delete, delete-orphan')
 
     creator = db.relationship('User', foreign_keys=[creator_id], backref=backref("user", cascade="all,delete"))
     room_id = db.Column(db.Integer, ForeignKey("rooms.id"), nullable=False)
@@ -85,5 +83,3 @@ class RoomBookingForm(FlaskForm):
     resources = MultiCheckboxField(u'Resources')
 
     submit = SubmitField('Submit')
-
-
