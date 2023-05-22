@@ -13,7 +13,7 @@ class User(db.Model):
     created = db.Column(db.DateTime, default=datetime.datetime.now(), nullable=False)
     role = db.Column(db.String(150), default='user', nullable=False)
 
-    bookings = db.relationship('Booking', back_populates="creator", cascade='all, delete, delete-orphan')
+    bookings = db.relationship('Booking', back_populates="creator", cascade='all, delete, delete-orphan', backref="")
 
     def __repr__(self):
         return f'<User "{self.firstname} {self.lastname}">'

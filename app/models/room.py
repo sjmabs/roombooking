@@ -9,6 +9,7 @@ from wtforms_alchemy import QuerySelectMultipleField
 
 from wtforms.validators import DataRequired, Length
 from sqlalchemy import ForeignKey
+from sqlalchemy.orm import backref
 from datetime import datetime
 now = datetime.now()
 
@@ -49,8 +50,8 @@ class RoomBooking(db.Model):
     __tablename__ = "roombookings"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+
     creator_id = db.Column(db.Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    creator = db.relationship('User', foreign_keys=[creator_id])
     title = db.Column(db.String(150), nullable=False)
     summary = db.Column(db.Text, nullable=False)
     status = db.Column(db.String, default='pending approval', nullable=False)
@@ -64,6 +65,7 @@ class RoomBooking(db.Model):
 
     booked_resources = db.relationship('BookedResource', back_populates="room_booking", cascade='all, delete, delete-orphan')
 
+    creator = db.relationship('User', foreign_keys=[creator_id], backref=backref("user", cascade="all,delete"))
     room_id = db.Column(db.Integer, ForeignKey("rooms.id"), nullable=False)
     room = db.relationship('Room', foreign_keys=[room_id])
 
