@@ -3,7 +3,7 @@ from flask_admin import Admin
 
 from app.models.admin import UserView
 from app.models.user import User
-from app.models.room import RoomBooking
+from app.models.room import RoomBooking, Room
 from app.models.resource import Resource
 from werkzeug.exceptions import HTTPException
 
@@ -50,6 +50,8 @@ def create_app(config_class=Config):
 
     # add admin views here
     admin.add_view(UserView(User, db.session))
+    admin.add_view(ModelView(Room, db.session))
+    admin.add_view(ModelView(Resource, db.session))
     admin.add_view(ModelView(RoomBooking, db.session))
 
     # Register blueprints here
@@ -64,5 +66,8 @@ def create_app(config_class=Config):
 
     from app.resources import bp as resources_bp
     app.register_blueprint(resources_bp, url_prefix='/resources')
+
+    with app.app_context():
+        db.create_all()
 
     return app
