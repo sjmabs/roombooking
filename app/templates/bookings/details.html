@@ -10,7 +10,9 @@
 
 <div class="topbar">
     {% if booking.status in ['declined', 'cancelled'] %}
-
+      <div class="badge badge-danger">
+        {{ booking.status }}
+      </div>
     {% elif booking.status == 'confirmed' %}
       <div class="badge badge-success">
         {{ booking.status }}
@@ -64,6 +66,4 @@
       <input class="danger" type="submit" value="Cancel" onclick="return confirm('Are you sure you want to cancel this booking?')">
     </form>
 {% endif %}
-
-
 {% endblock %}
