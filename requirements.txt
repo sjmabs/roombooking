@@ -1,8 +1,9 @@
 Flask==2.3.2
 Flask_Admin==1.6.1
+Flask_BasicAuth==0.2.0
 flask_sqlalchemy==3.0.3
 Flask_WTF==1.1.1
-SQLAlchemy==2.0.13
+SQLAlchemy==2.0.15
 Werkzeug==2.3.4
 WTForms==3.0.1
 WTForms_Alchemy==0.18.0

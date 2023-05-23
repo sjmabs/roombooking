@@ -1,7 +1,7 @@
 from app.bookings import bp
 from app.extensions import db
 from app.main.routes import login_required
-from flask import (flash, g, redirect, render_template, session, url_for)
+from flask import flash, g, redirect, render_template, session, url_for
 from app.models.user import User
 from app.models.resource import Resource, RoomResource, BookedResource
 from app.models.room import Room, RoomBooking, RoomBookingForm
@@ -20,7 +20,6 @@ def index():
         id=user_id).first()
 
     # if admin return all bookings
-    # change this to user.role = 'admin' once we have set up admin accounts
     if user.role == "admin":
         bookings = db.session.query(RoomBooking).order_by(
             RoomBooking.event_start
@@ -136,9 +135,6 @@ def get_booking(id, check_author=True):
     admin = User.query.filter_by(
         id=user_id).first()
 
-    # admin.role = "admin"
-    # db.session.commit()
-
     if check_author and booking.creator_id != user_id and admin.role != "admin":
         abort(403)
 
@@ -180,7 +176,6 @@ def accept(id):
 def update(id):
 
     booking = get_booking(id)
-    # booking.booked_resources.clear()
 
     # set the current resources as ticked not working but will use some sort of logic here
     if booking.booked_resources:
@@ -197,8 +192,6 @@ def update(id):
                            time_start=booking.time_start,
                            time_end=booking.time_end,
                            data={"resources": current_booked_resources})
-
-    # form.room.choices = ["", ] + [room.name for room in Room.query.all()]
 
     room_resources = [r for r in booking.room.room_resources]
     room_resources = [resource.resource.name for resource in room_resources]

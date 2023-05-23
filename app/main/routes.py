@@ -19,7 +19,7 @@ def index():
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     form = RegisterForm()
-    # create a register form model
+
     if form.validate_on_submit():
         password = form.password.data
         confirm = form.confirm.data

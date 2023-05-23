@@ -1,13 +1,12 @@
 from flask import Flask, redirect, Response
 from flask_admin import Admin
-
+from app.data import import_dummy_data
 from app.models.admin import UserView
 from app.models.user import User
 from app.models.room import RoomBooking, Room
 from app.models.resource import Resource
 from werkzeug.exceptions import HTTPException
-
-
+from sqlalchemy_utils import database_exists
 from config import Config
 from flask_admin.contrib import sqla
 from flask_basicauth import BasicAuth
@@ -68,6 +67,12 @@ def create_app(config_class=Config):
     app.register_blueprint(resources_bp, url_prefix='/resources')
 
     with app.app_context():
-        db.create_all()
+        if not database_exists(Config.SQLALCHEMY_DATABASE_URI):
+            add_data = input("Would you like to input dummy data? (Y/N): ")
+            db.create_all()
+
+            if add_data.upper() == "Y":
+                import_dummy_data()
 
     return app
+

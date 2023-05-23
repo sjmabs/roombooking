@@ -9,4 +9,4 @@ class Config:
         or 'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-# need to create postgres and link to that eventually rather than sqlite
+# need to create postgres and link rather than sqlite
