@@ -27,9 +27,6 @@
       {% endfor %}
 
     </div>
-    <hr>
-     <h4 class="d-flex justify-content-center">Room Availability (TODO)</h4>
-    <!-- The Room's day availability to show here with option to move forward and back a day -->
   </div>
   <hr>
   <form action="{{ url_for('bookings.create', room_id=room['id']) }}">

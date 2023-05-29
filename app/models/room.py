@@ -21,7 +21,7 @@ class Room(db.Model):
     room_resources = db.relationship('RoomResource', back_populates="room", cascade='all, delete, delete-orphan')
 
     def __repr__(self):
-        return f'<Room "{self.name}">'
+        return self.name
 
 
 class MultiCheckboxField(SelectMultipleField):

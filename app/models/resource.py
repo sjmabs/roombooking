@@ -27,7 +27,6 @@ class RoomResource(db.Model):
 
     resource_id = db.Column(db.Integer, ForeignKey("resources.id", ondelete="CASCADE"), nullable=False)
     resource = db.relationship('Resource', foreign_keys=[resource_id])
-    quantity = db.Column(db.Integer)
 
     booked_resources = db.relationship('BookedResource', back_populates="room_resource",
                                        cascade='all, delete, delete-orphan')
@@ -36,7 +35,6 @@ class RoomResource(db.Model):
 class BookedResource(db.Model):
     __tablename__ = "bookedresources"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
-    booked_quantity = db.Column(db.Integer)
 
     room_resource_id = db.Column(db.Integer, ForeignKey("roomresources.id", ondelete="CASCADE"), nullable=False)
     room_resource = db.relationship('RoomResource', foreign_keys=[room_resource_id])
