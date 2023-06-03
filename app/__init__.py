@@ -43,10 +43,6 @@ def create_app(config_class=Config):
                 {'WWW-Authenticate': 'Basic realm="Login Required"'}
             ))
 
-    class RoomResourceView(ModelView):
-        column_hide_backrefs = False
-        column_list = ('room', 'resource')
-
     # flask admin
     app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
     admin = Admin(app, name='Room Booking Admin', template_mode='bootstrap3')
@@ -56,7 +52,6 @@ def create_app(config_class=Config):
     admin.add_view(ModelView(Room, db.session))
     admin.add_view(ModelView(Resource, db.session))
     admin.add_view(ModelView(RoomBooking, db.session))
-    admin.add_view(RoomResourceView(RoomResource, db.session))
     # Register blueprints here
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
